@@ -191,6 +191,8 @@
   --color-stage-4: var(--stage-4);
   --color-stage-5: var(--stage-5);
   --color-stage-6: var(--stage-6);
+  --color-stage-7: var(--stage-7);
+
   --color-overdue: var(--overdue);
   --color-soon: var(--soon);
   --color-star: var(--star);
