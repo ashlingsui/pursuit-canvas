@@ -21,7 +21,7 @@ export function NoteSummary({ contact }: { contact: Contact }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [suggestion, setSuggestion] = useState<NoteSuggestion | null>(null);
-  const [applied, setApplied] = useState<Record<string, boolean>>({});
+  const [applied, setApplied] = useState({ summary: false, action: false, stage: false });
 
   const accent = contactStageMeta[contact.stage].accent;
 
