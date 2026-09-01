@@ -35,6 +35,7 @@ type BoardStore = {
   toggleStar: (id: string) => void;
   addNote: (contactId: string, body: string) => void;
   addContact: (contact: Omit<Contact, "id" | "notes">) => void;
+  addContactsBatch: (contacts: Omit<Contact, "id" | "notes" | "stage">[]) => void;
   addApplication: (app: Omit<Application, "id">) => void;
   setAside: (id: string, reason: SetAsideReason) => void;
   restore: (id: string) => void;
