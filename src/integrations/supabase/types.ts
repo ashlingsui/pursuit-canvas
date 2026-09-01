@@ -29,6 +29,7 @@ export type Database = {
           seniority: string | null
           set_aside: string | null
           stage: string
+          starred: boolean
           user_id: string
         }
         Insert: {
@@ -45,6 +46,7 @@ export type Database = {
           seniority?: string | null
           set_aside?: string | null
           stage?: string
+          starred?: boolean
           user_id: string
         }
         Update: {
@@ -61,6 +63,7 @@ export type Database = {
           seniority?: string | null
           set_aside?: string | null
           stage?: string
+          starred?: boolean
           user_id?: string
         }
         Relationships: [
