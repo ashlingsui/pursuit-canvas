@@ -169,6 +169,8 @@
   --stage-4: oklch(0.63 0.11 158);
   --stage-5: oklch(0.72 0.13 82);
   --stage-6: oklch(0.64 0.16 32);
+  --stage-7: oklch(0.62 0.105 176);
+
 
   --overdue: oklch(0.56 0.18 24);
   --soon: oklch(0.63 0.13 74);
