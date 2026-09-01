@@ -13,7 +13,17 @@ import { useBoardSensors, resolveDrop } from "./dnd";
 const boardClass = "flex gap-5 overflow-x-auto px-6 pb-6 pt-2 lg:px-10";
 
 export function ApplicationsBoard() {
-  const { applications, query, moveApplication, setAside, restore, loading, error } = useBoard();
+  const {
+    applications,
+    query,
+    moveApplication,
+    setAside,
+    restore,
+    toggleApplicationStar,
+    loading,
+    error,
+  } = useBoard();
+
   const sensors = useBoardSensors();
   const hydrated = useHydrated();
   const [dragging, setDragging] = useState<Application | null>(null);
