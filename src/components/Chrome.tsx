@@ -164,6 +164,8 @@ export function Chrome({ children }: { children: ReactNode }) {
         ) : (
           <AddContactDialog onClose={() => setAdding(false)} />
         ))}
+
+      {uploading && <BatchUploadContacts onClose={() => setUploading(false)} />}
     </div>
   );
 }
