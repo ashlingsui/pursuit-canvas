@@ -2,13 +2,17 @@ export type DueTone = "overdue" | "soon" | "later";
 
 export function startOfToday() {
   const d = new Date();
-  d.setHours(0, 0, 0, 0);
+  d.setUTCHours(0, 0, 0, 0);
   return d;
+}
+
+function parseDueDate(iso: string) {
+  return new Date(`${iso}T00:00:00Z`);
 }
 
 export function dueTone(iso?: string): DueTone | null {
   if (!iso) return null;
-  const diff = Math.round((new Date(`${iso}T00:00:00`).getTime() - startOfToday().getTime()) / 86400000);
+  const diff = Math.round((parseDueDate(iso).getTime() - startOfToday().getTime()) / 86400000);
   if (diff < 0) return "overdue";
   if (diff <= 3) return "soon";
   return "later";
@@ -16,17 +20,17 @@ export function dueTone(iso?: string): DueTone | null {
 
 export function formatDue(iso?: string) {
   if (!iso) return "";
-  const diff = Math.round((new Date(`${iso}T00:00:00`).getTime() - startOfToday().getTime()) / 86400000);
+  const diff = Math.round((parseDueDate(iso).getTime() - startOfToday().getTime()) / 86400000);
   if (diff === 0) return "today";
   if (diff === 1) return "tomorrow";
   if (diff === -1) return "1 day overdue";
   if (diff < 0) return `${Math.abs(diff)} days overdue`;
   if (diff <= 6) return `in ${diff} days`;
-  return new Date(`${iso}T00:00:00`).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  return parseDueDate(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" });
 }
 
 export function formatDate(iso: string) {
-  return new Date(`${iso}T00:00:00`).toLocaleDateString(undefined, {
+  return parseDueDate(iso).toLocaleDateString(undefined, {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -34,5 +38,5 @@ export function formatDate(iso: string) {
 }
 
 export function formatShortDate(iso: string) {
-  return new Date(`${iso}T00:00:00`).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  return parseDueDate(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" });
 }
