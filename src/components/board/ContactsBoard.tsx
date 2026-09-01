@@ -29,6 +29,7 @@ export function ContactsBoard() {
   return (
     <>
       <DndContext
+        id="contacts"
         sensors={sensors}
         collisionDetection={closestCorners}
         onDragStart={(e: DragStartEvent) =>

@@ -25,6 +25,7 @@ export function ApplicationsBoard() {
   return (
     <>
       <DndContext
+        id="applications"
         sensors={sensors}
         collisionDetection={closestCorners}
         onDragStart={(e: DragStartEvent) =>
