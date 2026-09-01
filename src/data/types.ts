@@ -25,9 +25,11 @@ export type Contact = {
   id: string;
   name: string;
   org: string;
+  role: string;
   affiliation: string;
   tags: string[];
   stage: ContactStage;
+  starred?: boolean;
   nextAction?: string;
   nextActionDue?: string; // ISO date
   notes: Note[];
