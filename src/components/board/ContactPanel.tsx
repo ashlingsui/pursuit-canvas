@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Star, X } from "lucide-react";
 import { CONTACT_STAGES, contactStageMeta, type Contact } from "@/data/types";
+import { NoteSummary } from "./NoteSummary";
 import { useBoard } from "@/lib/board-store";
 import { formatDate } from "@/lib/dates";
 
