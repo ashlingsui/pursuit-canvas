@@ -58,8 +58,10 @@ export type Application = {
   location?: string;
   seniority?: string;
   stage: AppStage;
+  starred?: boolean;
   setAside?: SetAsideReason;
 };
+
 
 type StageMeta<T extends string> = {
   id: T;
