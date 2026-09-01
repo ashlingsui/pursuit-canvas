@@ -14,13 +14,178 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      applications: {
+        Row: {
+          applied_on: string
+          company: string
+          created_at: string
+          id: string
+          location: string | null
+          position: number
+          posting_url: string | null
+          referred_by_contact_id: string | null
+          resume_version: string
+          role: string
+          seniority: string | null
+          set_aside: string | null
+          stage: string
+          user_id: string
+        }
+        Insert: {
+          applied_on?: string
+          company: string
+          created_at?: string
+          id?: string
+          location?: string | null
+          position?: number
+          posting_url?: string | null
+          referred_by_contact_id?: string | null
+          resume_version?: string
+          role?: string
+          seniority?: string | null
+          set_aside?: string | null
+          stage?: string
+          user_id: string
+        }
+        Update: {
+          applied_on?: string
+          company?: string
+          created_at?: string
+          id?: string
+          location?: string | null
+          position?: number
+          posting_url?: string | null
+          referred_by_contact_id?: string | null
+          resume_version?: string
+          role?: string
+          seniority?: string | null
+          set_aside?: string | null
+          stage?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "applications_referred_by_contact_id_fkey"
+            columns: ["referred_by_contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contacts: {
+        Row: {
+          affiliation: string
+          ai_summary: string | null
+          ai_summary_date: string | null
+          created_at: string
+          id: string
+          name: string
+          next_action: string | null
+          next_action_due: string | null
+          org: string
+          position: number
+          role: string
+          stage: string
+          starred: boolean
+          tags: string[]
+          user_id: string
+        }
+        Insert: {
+          affiliation?: string
+          ai_summary?: string | null
+          ai_summary_date?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          next_action?: string | null
+          next_action_due?: string | null
+          org?: string
+          position?: number
+          role?: string
+          stage?: string
+          starred?: boolean
+          tags?: string[]
+          user_id: string
+        }
+        Update: {
+          affiliation?: string
+          ai_summary?: string | null
+          ai_summary_date?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          next_action?: string | null
+          next_action_due?: string | null
+          org?: string
+          position?: number
+          role?: string
+          stage?: string
+          starred?: boolean
+          tags?: string[]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      notes: {
+        Row: {
+          body: string
+          contact_id: string
+          created_at: string
+          id: string
+          note_date: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          contact_id: string
+          created_at?: string
+          id?: string
+          note_date?: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          contact_id?: string
+          created_at?: string
+          id?: string
+          note_date?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notes_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      seed_demo_data: { Args: { _user: string }; Returns: undefined }
     }
     Enums: {
       [_ in never]: never
