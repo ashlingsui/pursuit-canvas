@@ -171,6 +171,17 @@ export function BoardProvider({ children }: { children: ReactNode }) {
         patchContactFn({ data: { id, patch: { starred } } }).catch(fail);
       },
 
+      toggleApplicationStar: (id) => {
+        const current = data.applications.find((a) => a.id === id);
+        const starred = !current?.starred;
+        patchCache((prev) => ({
+          ...prev,
+          applications: prev.applications.map((a) => (a.id === id ? { ...a, starred } : a)),
+        }));
+        starApplicationFn({ data: { id, starred } }).catch(fail);
+      },
+
+
       addNote: (contactId, body) => {
         const note: Note = { id: uid(), date: today(), body };
         patchCache((prev) => ({
