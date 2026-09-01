@@ -42,7 +42,11 @@ export type Application = {
   role: string;
   appliedOn: string; // ISO date
   resumeVersion: string;
-  referredBy?: string;
+  referredByContactId?: string;
+  referredBy?: string; // resolved contact name, for display
+  postingUrl?: string;
+  location?: string;
+  seniority?: string;
   stage: AppStage;
   setAside?: SetAsideReason;
 };
