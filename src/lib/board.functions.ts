@@ -373,6 +373,21 @@ export const addApplicationFn = createServerFn({ method: "POST" })
     return { id: inserted!.id };
   });
 
+export const starApplicationFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z.object({ id: z.string(), starred: z.boolean() }).parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase
+      .from("applications")
+      .update({ starred: data.starred })
+      .eq("id", data.id);
+    if (error) throw error;
+    return { ok: true };
+  });
+
+
 export const setApplicationAsideFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) =>
