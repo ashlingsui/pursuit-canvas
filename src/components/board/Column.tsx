@@ -2,19 +2,27 @@ import type { ReactNode } from "react";
 import { useDroppable } from "@dnd-kit/core";
 import { cn } from "@/lib/utils";
 
-type Props = {
-  id: string;
+type ShellProps = {
   label: string;
   count: number;
   accent: string;
   empty: string;
   index: number;
   children: ReactNode;
+  isOver?: boolean;
+  dropRef?: (node: HTMLElement | null) => void;
 };
 
-export function Column({ id, label, count, accent, empty, index, children }: Props) {
-  const { setNodeRef, isOver } = useDroppable({ id, data: { type: "column" } });
-
+export function ColumnShell({
+  label,
+  count,
+  accent,
+  empty,
+  index,
+  children,
+  isOver = false,
+  dropRef,
+}: ShellProps) {
   return (
     <section
       className="flex w-[19rem] shrink-0 flex-col gap-3"
@@ -48,16 +56,15 @@ export function Column({ id, label, count, accent, empty, index, children }: Pro
       </header>
 
       <div
-        ref={setNodeRef}
-        className={cn(
-          "flex min-h-[8rem] flex-1 flex-col gap-2.5 rounded-2xl p-2 transition-colors duration-200",
-          isOver ? "ring-1" : "ring-0",
-        )}
+        ref={dropRef}
+        className={cn("flex min-h-[8rem] flex-1 flex-col gap-2.5 rounded-2xl p-2 transition-colors duration-200")}
         style={{
           backgroundColor: isOver
             ? `color-mix(in oklab, ${accent} 9%, transparent)`
             : "color-mix(in oklab, var(--foreground) 3%, transparent)",
-          ...(isOver ? { boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${accent} 35%, transparent)` } : {}),
+          ...(isOver
+            ? { boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${accent} 35%, transparent)` }
+            : {}),
         }}
       >
         {count === 0 ? (
@@ -70,4 +77,9 @@ export function Column({ id, label, count, accent, empty, index, children }: Pro
       </div>
     </section>
   );
+}
+
+export function Column({ id, ...rest }: ShellProps & { id: string }) {
+  const { setNodeRef, isOver } = useDroppable({ id, data: { type: "column" } });
+  return <ColumnShell {...rest} isOver={isOver} dropRef={setNodeRef} />;
 }
