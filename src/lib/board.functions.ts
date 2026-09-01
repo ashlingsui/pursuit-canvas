@@ -41,6 +41,8 @@ type ApplicationRow = {
   posting_url: string | null;
   location: string | null;
   seniority: string | null;
+  starred: boolean;
+
 };
 
 type NoteRow = { id: string; contact_id: string; note_date: string; body: string };
