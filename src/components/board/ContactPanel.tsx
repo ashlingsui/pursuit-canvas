@@ -149,6 +149,9 @@ export function ContactPanel({ contact, onClose }: { contact: Contact | null; on
             What you learned, in your own words.
           </p>
 
+          <NoteSummary contact={contact} />
+
+
           <div className="mt-4 rounded-2xl border border-border/70 bg-background/70 p-1 focus-within:border-ring">
             <textarea
               value={draft}
