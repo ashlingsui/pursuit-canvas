@@ -47,13 +47,15 @@ export function ContactPanel({ contact, onClose }: { contact: Contact | null; on
               <input
                 value={contact.org}
                 onChange={(e) => updateContact(contact.id, { org: e.target.value })}
-                className="w-[10rem] rounded-md border border-transparent bg-transparent text-[0.85rem] text-muted-foreground outline-none hover:border-border focus:border-ring"
+                size={Math.max(contact.org.length, 4)}
+                className="rounded-md border border-transparent bg-transparent text-[0.85rem] text-muted-foreground outline-none hover:border-border focus:border-ring"
               />
               <span className="text-muted-foreground">·</span>
               <input
                 value={contact.affiliation}
                 onChange={(e) => updateContact(contact.id, { affiliation: e.target.value })}
-                className="w-[11rem] rounded-md border border-transparent bg-transparent text-[0.85rem] text-muted-foreground outline-none hover:border-border focus:border-ring"
+                size={Math.max(contact.affiliation.length, 4)}
+                className="rounded-md border border-transparent bg-transparent text-[0.85rem] text-muted-foreground outline-none hover:border-border focus:border-ring"
               />
             </div>
           </div>
@@ -160,7 +162,9 @@ export function ContactPanel({ contact, onClose }: { contact: Contact | null; on
                 Nothing written down yet.
               </li>
             )}
-            {contact.notes.map((note) => (
+            {[...contact.notes]
+              .sort((a, b) => (a.date < b.date ? 1 : -1))
+              .map((note) => (
               <li key={note.id} className="relative list-none">
                 <span
                   className="absolute -left-[1.6rem] top-[0.45rem] h-2 w-2 rounded-full"
@@ -172,8 +176,8 @@ export function ContactPanel({ contact, onClose }: { contact: Contact | null; on
                 <p className="mt-1.5 whitespace-pre-wrap font-display text-[0.95rem] leading-[1.75] text-foreground/90">
                   {note.body}
                 </p>
-              </li>
-            ))}
+                </li>
+              ))}
           </ol>
         </div>
       </aside>
