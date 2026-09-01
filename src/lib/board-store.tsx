@@ -11,6 +11,7 @@ import type {
 import {
   addApplicationFn,
   addContactFn,
+  addContactsBatchFn,
   addNoteFn,
   loadBoard,
   moveApplicationFn,
@@ -34,6 +35,7 @@ type BoardStore = {
   toggleStar: (id: string) => void;
   addNote: (contactId: string, body: string) => void;
   addContact: (contact: Omit<Contact, "id" | "notes">) => void;
+  addContactsBatch: (contacts: Omit<Contact, "id" | "notes" | "stage">[]) => void;
   addApplication: (app: Omit<Application, "id">) => void;
   setAside: (id: string, reason: SetAsideReason) => void;
   restore: (id: string) => void;
@@ -192,6 +194,30 @@ export function BoardProvider({ children }: { children: ReactNode }) {
             ...(contact.nextAction ? { nextAction: contact.nextAction } : {}),
             ...(contact.nextActionDue ? { nextActionDue: contact.nextActionDue } : {}),
           },
+        }).then(settle, fail);
+      },
+
+      addContactsBatch: (contacts) => {
+        const newContacts: Contact[] = contacts.map((c) => ({
+          ...c,
+          id: uid(),
+          stage: "not_contacted",
+          notes: [],
+        }));
+        patchCache((prev) => ({
+          ...prev,
+          contacts: [...newContacts, ...prev.contacts],
+        }));
+        addContactsBatchFn({
+          data: contacts.map((c) => ({
+            name: c.name,
+            org: c.org,
+            role: c.role,
+            affiliation: c.affiliation,
+            tags: c.tags,
+            nextAction: c.nextAction ?? null,
+            nextActionDue: c.nextActionDue ?? null,
+          })),
         }).then(settle, fail);
       },
 

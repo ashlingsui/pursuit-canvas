@@ -1,12 +1,13 @@
 import { useState, type ReactNode } from "react";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { LogOut, Plus, Search } from "lucide-react";
+import { LogOut, Plus, Search, Upload } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { CONTACT_STAGES, APP_STAGES, appStageMeta, contactStageMeta } from "@/data/types";
 import { useBoard } from "@/lib/board-store";
 import { dueTone } from "@/lib/dates";
 import { AddApplicationDialog, AddContactDialog } from "@/components/board/AddDialogs";
+import { BatchUploadContacts } from "@/components/board/BatchUploadContacts";
 import { cn } from "@/lib/utils";
 
 function Pulse({ onApplications }: { onApplications: boolean }) {
@@ -41,6 +42,7 @@ export function Chrome({ children }: { children: ReactNode }) {
   const onApplications = pathname.startsWith("/applications");
   const { query, setQuery, contacts, displayName } = useBoard();
   const [adding, setAdding] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -131,6 +133,17 @@ export function Chrome({ children }: { children: ReactNode }) {
               {onApplications ? "Application" : "Contact"}
             </button>
 
+            {!onApplications && (
+              <button
+                onClick={() => setUploading(true)}
+                title="Upload contacts from CSV"
+                className="flex items-center gap-1.5 rounded-full border border-border/70 bg-card px-3.5 py-2.5 text-[0.8rem] font-semibold text-muted-foreground shadow-[var(--shadow-card)] transition-colors hover:text-foreground"
+              >
+                <Upload className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">Upload</span>
+              </button>
+            )}
+
             <button
               onClick={signOut}
               title={displayName ? `Signed in as ${displayName}` : "Sign out"}
@@ -151,6 +164,8 @@ export function Chrome({ children }: { children: ReactNode }) {
         ) : (
           <AddContactDialog onClose={() => setAdding(false)} />
         ))}
+
+      {uploading && <BatchUploadContacts onClose={() => setUploading(false)} />}
     </div>
   );
 }
