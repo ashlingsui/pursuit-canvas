@@ -132,13 +132,128 @@
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
+/* ---------------------------------------------------------------
+ * Pipeline design system: warm paper canvas, ink type, and a single
+ * continuous stage ramp (cool + quiet -> warm + luminous) that carries
+ * the sense of progress across both boards.
+ * --------------------------------------------------------------- */
+
+:root {
+  --radius: 0.875rem;
+
+  --background: oklch(0.983 0.008 86);
+  --foreground: oklch(0.245 0.021 62);
+  --card: oklch(0.997 0.004 90);
+  --card-foreground: oklch(0.245 0.021 62);
+  --popover: oklch(0.997 0.004 90);
+  --popover-foreground: oklch(0.245 0.021 62);
+  --primary: oklch(0.38 0.078 274);
+  --primary-foreground: oklch(0.985 0.008 86);
+  --secondary: oklch(0.945 0.014 84);
+  --secondary-foreground: oklch(0.32 0.026 62);
+  --muted: oklch(0.947 0.012 84);
+  --muted-foreground: oklch(0.535 0.024 66);
+  --accent: oklch(0.93 0.03 78);
+  --accent-foreground: oklch(0.3 0.03 62);
+  --destructive: oklch(0.585 0.184 22);
+  --destructive-foreground: oklch(0.985 0.008 86);
+  --border: oklch(0.895 0.012 82);
+  --input: oklch(0.895 0.012 82);
+  --ring: oklch(0.62 0.06 274);
+
+  /* stage ramp */
+  --stage-1: oklch(0.6 0.055 262);
+  --stage-2: oklch(0.6 0.1 238);
+  --stage-3: oklch(0.62 0.1 196);
+  --stage-4: oklch(0.63 0.11 158);
+  --stage-5: oklch(0.72 0.13 82);
+  --stage-6: oklch(0.64 0.16 32);
+
+  --overdue: oklch(0.56 0.18 24);
+  --soon: oklch(0.63 0.13 74);
+
+  --shadow-card: 0 1px 2px oklch(0.245 0.021 62 / 6%), 0 6px 18px -12px oklch(0.245 0.021 62 / 22%);
+  --shadow-lift: 0 12px 32px -12px oklch(0.245 0.021 62 / 30%), 0 2px 6px oklch(0.245 0.021 62 / 8%);
+  --shadow-panel: -24px 0 60px -32px oklch(0.245 0.021 62 / 32%);
+}
+
+@theme inline {
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --color-stage-1: var(--stage-1);
+  --color-stage-2: var(--stage-2);
+  --color-stage-3: var(--stage-3);
+  --color-stage-4: var(--stage-4);
+  --color-stage-5: var(--stage-5);
+  --color-stage-6: var(--stage-6);
+  --color-overdue: var(--overdue);
+  --color-soon: var(--soon);
+}
+
 @layer base {
   * {
     border-color: var(--color-border);
   }
 
+  html {
+    -webkit-font-smoothing: antialiased;
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+    background-image:
+      radial-gradient(1200px 500px at 12% -10%, oklch(0.6 0.1 238 / 7%), transparent 70%),
+      radial-gradient(1000px 460px at 92% -6%, oklch(0.72 0.13 82 / 9%), transparent 70%);
+    background-repeat: no-repeat;
   }
 }
+
+@utility tint {
+  background-color: color-mix(in oklab, var(--tint) 10%, var(--color-card));
+}
+
+@utility grain {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.35;
+    background-image: radial-gradient(oklch(0.245 0.021 62 / 5%) 0.5px, transparent 0.5px);
+    background-size: 4px 4px;
+  }
+}
+
+@keyframes settle {
+  0% {
+    transform: scale(0.985);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@utility animate-settle {
+  animation: settle 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes panel-in {
+  0% {
+    transform: translateX(18px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@utility animate-panel-in {
+  animation: panel-in 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
