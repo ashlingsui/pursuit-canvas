@@ -5,7 +5,8 @@ import type { Application, Contact } from "./types";
 // so a couple of these are intentionally in the recent past.
 const daysFromNow = (n: number) => {
   const d = new Date();
-  d.setDate(d.getDate() + n);
+  d.setUTCDate(d.getUTCDate() + n);
+  d.setUTCHours(0, 0, 0, 0);
   return d.toISOString().slice(0, 10);
 };
 
