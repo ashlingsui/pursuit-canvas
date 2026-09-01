@@ -26,7 +26,7 @@ export function formatDue(iso?: string) {
   if (diff === -1) return "1 day overdue";
   if (diff < 0) return `${Math.abs(diff)} days overdue`;
   if (diff <= 6) return `in ${diff} days`;
-  return parseDueDate(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  return parseDueDate(iso).toLocaleDateString(undefined, { month: "short", day: "numeric", timeZone: "UTC" });
 }
 
 export function formatDate(iso: string) {
@@ -34,9 +34,10 @@ export function formatDate(iso: string) {
     month: "short",
     day: "numeric",
     year: "numeric",
+    timeZone: "UTC",
   });
 }
 
 export function formatShortDate(iso: string) {
-  return parseDueDate(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  return parseDueDate(iso).toLocaleDateString(undefined, { month: "short", day: "numeric", timeZone: "UTC" });
 }

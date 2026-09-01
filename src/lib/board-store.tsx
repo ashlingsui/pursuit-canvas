@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
+import { createContext, useContext, useMemo, useState, type Context, type ReactNode } from "react";
 import { mockApplications, mockContacts } from "@/data/mock";
 import type {
   AppStage,
@@ -25,7 +25,15 @@ type BoardStore = {
   restore: (id: string) => void;
 };
 
-const BoardContext = createContext<BoardStore | null>(null);
+const globalScope = globalThis as unknown as {
+  __groundworkBoardContext?: Context<BoardStore | null>;
+};
+
+// Reuse one context instance across HMR updates so the provider and consumers
+// never end up bound to different module copies.
+const BoardContext =
+  globalScope.__groundworkBoardContext ??
+  (globalScope.__groundworkBoardContext = createContext<BoardStore | null>(null));
 
 const uid = () => Math.random().toString(36).slice(2, 10);
 
