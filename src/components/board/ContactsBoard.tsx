@@ -13,7 +13,8 @@ const boardClass = "flex gap-5 overflow-x-auto px-6 pb-12 pt-2 lg:px-10";
 
 type Group = { company: string; items: Contact[] };
 
-/** Keeps board order but pulls contacts from the same company next to each other. */
+/** Keeps board order but pulls contacts from the same company next to each other.
+ *  Starred contacts are placed at the front of each company group. */
 function groupByCompany(items: Contact[]): Group[] {
   const groups: Group[] = [];
   for (const item of items) {
@@ -21,7 +22,10 @@ function groupByCompany(items: Contact[]): Group[] {
     if (existing) existing.items.push(item);
     else groups.push({ company: item.org, items: [item] });
   }
-  return groups;
+  return groups.map((g) => ({
+    ...g,
+    items: g.items.slice().sort((a, b) => Number(b.starred) - Number(a.starred)),
+  }));
 }
 
 function CompanyLabel({ company, count, accent }: { company: string; count: number; accent: string }) {
