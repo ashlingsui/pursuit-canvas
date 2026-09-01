@@ -171,6 +171,7 @@
 
   --overdue: oklch(0.56 0.18 24);
   --soon: oklch(0.63 0.13 74);
+  --star: oklch(0.74 0.15 82);
 
   --shadow-card: 0 1px 2px oklch(0.245 0.021 62 / 6%), 0 6px 18px -12px oklch(0.245 0.021 62 / 22%);
   --shadow-lift: 0 12px 32px -12px oklch(0.245 0.021 62 / 30%), 0 2px 6px oklch(0.245 0.021 62 / 8%);
@@ -188,6 +189,7 @@
   --color-stage-6: var(--stage-6);
   --color-overdue: var(--overdue);
   --color-soon: var(--soon);
+  --color-star: var(--star);
 }
 
 @layer base {
