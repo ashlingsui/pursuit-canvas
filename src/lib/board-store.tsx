@@ -17,6 +17,7 @@ type BoardStore = {
   moveContact: (id: string, stage: ContactStage, beforeId: string | null) => void;
   moveApplication: (id: string, stage: AppStage, beforeId: string | null) => void;
   updateContact: (id: string, patch: Partial<Contact>) => void;
+  toggleStar: (id: string) => void;
   addNote: (contactId: string, body: string) => void;
   addContact: (contact: Omit<Contact, "id" | "notes">) => void;
   addApplication: (app: Omit<Application, "id">) => void;
@@ -72,6 +73,10 @@ export function BoardProvider({ children }: { children: ReactNode }) {
         ),
       updateContact: (id, patch) =>
         setContacts((prev) => prev.map((c) => (c.id === id ? { ...c, ...patch } : c))),
+      toggleStar: (id) =>
+        setContacts((prev) =>
+          prev.map((c) => (c.id === id ? { ...c, starred: !c.starred } : c)),
+        ),
       addNote: (contactId, body) =>
         setContacts((prev) =>
           prev.map((c) => {

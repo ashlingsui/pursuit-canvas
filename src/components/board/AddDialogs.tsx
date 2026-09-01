@@ -57,6 +57,7 @@ export function AddContactDialog({ onClose }: { onClose: () => void }) {
   const [form, setForm] = useState({
     name: "",
     org: "",
+    role: "",
     affiliation: "",
     tags: "",
     stage: CONTACT_STAGES[0] as (typeof CONTACT_STAGES)[number],
@@ -74,6 +75,7 @@ export function AddContactDialog({ onClose }: { onClose: () => void }) {
         addContact({
           name: form.name.trim(),
           org: form.org.trim() || "—",
+          role: form.role.trim() || "—",
           affiliation: form.affiliation.trim() || "—",
           tags: form.tags.split(",").map((t) => t.trim()).filter(Boolean),
           stage: form.stage,
@@ -89,8 +91,17 @@ export function AddContactDialog({ onClose }: { onClose: () => void }) {
       </label>
       <div className="grid grid-cols-2 gap-3">
         <label className="block">
-          <span className={label}>Org</span>
+          <span className={label}>Company</span>
           <input className={input} value={form.org} onChange={(e) => setForm({ ...form, org: e.target.value })} />
+        </label>
+        <label className="block">
+          <span className={label}>Role</span>
+          <input
+            className={input}
+            placeholder="Product Manager"
+            value={form.role}
+            onChange={(e) => setForm({ ...form, role: e.target.value })}
+          />
         </label>
         <label className="block">
           <span className={label}>Affiliation</span>
