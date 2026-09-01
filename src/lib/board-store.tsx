@@ -35,6 +35,8 @@ type BoardStore = {
   moveApplication: (id: string, stage: AppStage, beforeId: string | null) => void;
   updateContact: (id: string, patch: Partial<Contact>) => void;
   toggleStar: (id: string) => void;
+  toggleApplicationStar: (id: string) => void;
+
   addNote: (contactId: string, body: string) => void;
   addContact: (contact: Omit<Contact, "id" | "notes">) => void;
   addContactsBatch: (contacts: Omit<Contact, "id" | "notes" | "stage">[]) => void;
