@@ -45,9 +45,6 @@ type ApplicationRow = {
 
 type NoteRow = { id: string; contact_id: string; note_date: string; body: string };
 
-const opt = <T,>(value: T | null | undefined) =>
-  value === null || value === undefined || value === "" ? {} : { value };
-
 function toContact(row: ContactRow, notes: NoteRow[]): Contact {
   return {
     id: row.id,
@@ -242,7 +239,7 @@ export const patchContactFn = createServerFn({ method: "POST" })
       row["ai_summary_date"] = p.aiSummary?.date ?? null;
     }
     if (Object.keys(row).length === 0) return { ok: true };
-    const { error } = await context.supabase.from("contacts").update(row).eq("id", data.id);
+    const { error } = await context.supabase.from("contacts").update(row as never).eq("id", data.id);
     if (error) throw error;
     return { ok: true };
   });
@@ -366,5 +363,3 @@ export const addNoteFn = createServerFn({ method: "POST" })
     if (error) throw error;
     return { id: inserted!.id };
   });
-
-export { opt };
