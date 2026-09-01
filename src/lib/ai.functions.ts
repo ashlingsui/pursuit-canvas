@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { NoObjectGeneratedError, Output, streamText } from "ai";
+import { NoObjectGeneratedError, Output, generateText } from "ai";
 import { z } from "zod";
 import { CONTACT_STAGES } from "@/data/types";
 
