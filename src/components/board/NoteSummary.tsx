@@ -29,7 +29,7 @@ export function NoteSummary({ contact }: { contact: Contact }) {
     setLoading(true);
     setError(null);
     setSuggestion(null);
-    setApplied({});
+    setApplied({ summary: false, action: false, stage: false });
     try {
       const result = await run({
         data: {
