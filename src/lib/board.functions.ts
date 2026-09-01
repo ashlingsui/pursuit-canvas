@@ -76,6 +76,8 @@ function toApplication(row: ApplicationRow, names: Map<string, string>): Applica
     appliedOn: row.applied_on,
     resumeVersion: row.resume_version,
     stage: row.stage as AppStage,
+    ...(row.starred ? { starred: true } : {}),
+
     ...(row.set_aside ? { setAside: row.set_aside as "rejected" | "ghosted" } : {}),
     ...(row.referred_by_contact_id
       ? {
