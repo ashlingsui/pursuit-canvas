@@ -81,20 +81,24 @@ export function BatchUploadContacts({ onClose }: { onClose: () => void }) {
     if (validRows.length === 0 || parsed.errors.length > 0) return;
     setSaving(true);
     addContactsBatch(
-      validRows.map((r) => ({
-        name: r["name"].trim(),
-        org: r["company"].trim(),
-        role: r["role"]?.trim() || "—",
-        affiliation: r["affiliation"]?.trim() || "—",
-        tags: r["tags"]
-          ? r["tags"]
-              .split(",")
-              .map((t) => t.trim())
-              .filter(Boolean)
-          : [],
-        ...(r["next_action"]?.trim() ? { nextAction: r["next_action"].trim() } : {}),
-        ...(r["next_action_due"]?.trim() ? { nextActionDue: r["next_action_due"].trim() } : {}),
-      })),
+      validRows.map((r) => {
+        const name = r["name"]?.trim() ?? "";
+        const org = r["company"]?.trim() ?? "";
+        return {
+          name,
+          org,
+          role: r["role"]?.trim() || "—",
+          affiliation: r["affiliation"]?.trim() || "—",
+          tags: r["tags"]
+            ? r["tags"]
+                .split(",")
+                .map((t) => t.trim())
+                .filter(Boolean)
+            : [],
+          ...(r["next_action"]?.trim() ? { nextAction: r["next_action"].trim() } : {}),
+          ...(r["next_action_due"]?.trim() ? { nextActionDue: r["next_action_due"].trim() } : {}),
+        };
+      }),
     );
     onClose();
   }
