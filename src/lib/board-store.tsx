@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
+import { createContext, useContext, useMemo, useState, type Context, type ReactNode } from "react";
 import { mockApplications, mockContacts } from "@/data/mock";
 import type {
   AppStage,
@@ -26,7 +26,7 @@ type BoardStore = {
 };
 
 const globalScope = globalThis as unknown as {
-  __groundworkBoardContext?: React.Context<BoardStore | null>;
+  __groundworkBoardContext?: Context<BoardStore | null>;
 };
 
 // Reuse one context instance across HMR updates so the provider and consumers
