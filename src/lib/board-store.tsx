@@ -18,6 +18,8 @@ import {
   moveContactFn,
   patchContactFn,
   setApplicationAsideFn,
+  starApplicationFn,
+
   type BoardData,
 } from "./board.functions";
 
