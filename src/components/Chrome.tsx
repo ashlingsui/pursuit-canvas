@@ -133,6 +133,17 @@ export function Chrome({ children }: { children: ReactNode }) {
               {onApplications ? "Application" : "Contact"}
             </button>
 
+            {!onApplications && (
+              <button
+                onClick={() => setUploading(true)}
+                title="Upload contacts from CSV"
+                className="flex items-center gap-1.5 rounded-full border border-border/70 bg-card px-3.5 py-2.5 text-[0.8rem] font-semibold text-muted-foreground shadow-[var(--shadow-card)] transition-colors hover:text-foreground"
+              >
+                <Upload className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">Upload</span>
+              </button>
+            )}
+
             <button
               onClick={signOut}
               title={displayName ? `Signed in as ${displayName}` : "Sign out"}
