@@ -57,6 +57,14 @@ export function ContactsBoard() {
       ? "Loading your board…"
       : null;
 
+  if (notice) {
+    return (
+      <p className="px-6 py-16 font-display text-[1rem] italic text-muted-foreground lg:px-10">
+        {notice}
+      </p>
+    );
+  }
+
   const q = query.trim().toLowerCase();
   const visible = q
     ? contacts.filter(

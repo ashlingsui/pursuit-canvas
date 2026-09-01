@@ -25,6 +25,14 @@ export function ApplicationsBoard() {
       ? "Loading your board…"
       : null;
 
+  if (notice) {
+    return (
+      <p className="px-6 py-16 font-display text-[1rem] italic text-muted-foreground lg:px-10">
+        {notice}
+      </p>
+    );
+  }
+
   const q = query.trim().toLowerCase();
   const matches = (a: Application) =>
     !q || a.company.toLowerCase().includes(q) || a.role.toLowerCase().includes(q);
