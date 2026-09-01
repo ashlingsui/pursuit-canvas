@@ -3,10 +3,7 @@ import type {} from "@tanstack/react-start";
 
 const BASE_URL = "https://pursuit-canvas.lovable.app";
 
-const entries = [
-  { path: "/", changefreq: "weekly", priority: "1.0" },
-  { path: "/applications", changefreq: "weekly", priority: "0.8" },
-];
+const entries = [{ path: "/", changefreq: "weekly", priority: "1.0" }];
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
