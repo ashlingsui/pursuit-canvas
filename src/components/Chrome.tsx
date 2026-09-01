@@ -42,6 +42,7 @@ export function Chrome({ children }: { children: ReactNode }) {
   const onApplications = pathname.startsWith("/applications");
   const { query, setQuery, contacts, displayName } = useBoard();
   const [adding, setAdding] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
