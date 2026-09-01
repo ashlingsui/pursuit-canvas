@@ -51,12 +51,12 @@ export const summarizeContactNotes = createServerFn({ method: "POST" })
     ].join("\n");
 
     try {
-      const result = streamText({
+      const { output } = await generateText({
         model: gateway("google/gemini-3.7-flash"),
         output: Output.object({ schema: SuggestionSchema }),
         prompt,
       });
-      return await result.output;
+      return output;
     } catch (error) {
       if (NoObjectGeneratedError.isInstance(error) && error.text) {
         try {
