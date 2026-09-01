@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Star, X } from "lucide-react";
 import { CONTACT_STAGES, contactStageMeta, type Contact } from "@/data/types";
+import { NoteSummary } from "./NoteSummary";
 import { useBoard } from "@/lib/board-store";
 import { formatDate } from "@/lib/dates";
 
@@ -148,6 +149,9 @@ export function ContactPanel({ contact, onClose }: { contact: Contact | null; on
           <p className="mt-0.5 text-[0.78rem] text-muted-foreground">
             What you learned, in your own words.
           </p>
+
+          <NoteSummary contact={contact} />
+
 
           <div className="mt-4 rounded-2xl border border-border/70 bg-background/70 p-1 focus-within:border-ring">
             <textarea

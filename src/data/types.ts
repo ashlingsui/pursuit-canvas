@@ -33,6 +33,7 @@ export type Contact = {
   nextAction?: string;
   nextActionDue?: string; // ISO date
   notes: Note[];
+  aiSummary?: { body: string; date: string };
 };
 
 export type Application = {
