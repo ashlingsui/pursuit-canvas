@@ -49,15 +49,15 @@ export function BatchUploadContacts({ onClose }: { onClose: () => void }) {
   const [parseError, setParseError] = useState<string | null>(null);
 
   const parsed = useMemo(() => {
-    if (!raw) return { rows: [], errors: [] as string[] };
+    if (!raw) return { rows: [] as Record<string, string>[], errors: [] as string[] };
     try {
       const { rows } = parseCsv(raw);
       const errors: string[] = [];
 
       rows.forEach((row, idx) => {
         const line = idx + 2;
-        if (!row.name?.trim()) errors.push(`Row ${line}: missing name`);
-        if (!row.company?.trim()) errors.push(`Row ${line}: missing company`);
+        if (!row["name"]?.trim()) errors.push(`Row ${line}: missing name`);
+        if (!row["company"]?.trim()) errors.push(`Row ${line}: missing company`);
       });
 
       return { rows, errors };
@@ -66,7 +66,7 @@ export function BatchUploadContacts({ onClose }: { onClose: () => void }) {
     }
   }, [raw]);
 
-  const validRows = parsed.rows.filter((r) => r.name?.trim() && r.company?.trim());
+  const validRows = parsed.rows.filter((r) => r["name"]?.trim() && r["company"]?.trim());
 
   function handleFile(file: File) {
     setFileName(file.name);
@@ -82,18 +82,18 @@ export function BatchUploadContacts({ onClose }: { onClose: () => void }) {
     setSaving(true);
     addContactsBatch(
       validRows.map((r) => ({
-        name: r.name.trim(),
-        org: r.company.trim(),
-        role: r.role?.trim() || "—",
-        affiliation: r.affiliation?.trim() || "—",
-        tags: r.tags
-          ? r.tags
+        name: r["name"].trim(),
+        org: r["company"].trim(),
+        role: r["role"]?.trim() || "—",
+        affiliation: r["affiliation"]?.trim() || "—",
+        tags: r["tags"]
+          ? r["tags"]
               .split(",")
               .map((t) => t.trim())
               .filter(Boolean)
           : [],
-        ...(r.next_action?.trim() ? { nextAction: r.next_action.trim() } : {}),
-        ...(r.next_action_due?.trim() ? { nextActionDue: r.next_action_due.trim() } : {}),
+        ...(r["next_action"]?.trim() ? { nextAction: r["next_action"].trim() } : {}),
+        ...(r["next_action_due"]?.trim() ? { nextActionDue: r["next_action_due"].trim() } : {}),
       })),
     );
     onClose();
@@ -162,9 +162,9 @@ export function BatchUploadContacts({ onClose }: { onClose: () => void }) {
             <ul className="mt-2 grid gap-1">
               {validRows.slice(0, 8).map((r, i) => (
                 <li key={i} className="flex items-center gap-2 text-[0.78rem] text-foreground">
-                  <span className="truncate font-medium">{r.name}</span>
+                  <span className="truncate font-medium">{r["name"]}</span>
                   <span className="text-muted-foreground">—</span>
-                  <span className="truncate text-muted-foreground">{r.company}</span>
+                  <span className="truncate text-muted-foreground">{r["company"]}</span>
                 </li>
               ))}
               {validRows.length > 8 && (
