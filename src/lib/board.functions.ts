@@ -286,6 +286,45 @@ export const addContactFn = createServerFn({ method: "POST" })
     return { id: inserted!.id };
   });
 
+const BatchContactRow = z.object({
+  name: z.string().min(1),
+  org: z.string(),
+  role: z.string().default("—"),
+  affiliation: z.string().default("—"),
+  tags: z.array(z.string()).default([]),
+  nextAction: z.string().nullable().default(null),
+  nextActionDue: z.string().nullable().default(null),
+});
+
+export const addContactsBatchFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.array(BatchContactRow).parse(input))
+  .handler(async ({ data, context }) => {
+    const { data: rows } = await context.supabase
+      .from("contacts")
+      .select("position")
+      .order("position", { ascending: true });
+    const first = (rows ?? [])[0] as { position: number } | undefined;
+    let basePosition = first ? first.position - 1 : 1;
+
+    const inserts = data.map((c) => ({
+      user_id: context.userId,
+      name: c.name,
+      org: c.org,
+      role: c.role,
+      affiliation: c.affiliation,
+      tags: c.tags,
+      stage: "not_contacted" as const,
+      position: basePosition--,
+      next_action: c.nextAction,
+      next_action_due: c.nextActionDue,
+    }));
+
+    const { error } = await context.supabase.from("contacts").insert(inserts);
+    if (error) throw error;
+    return { count: inserts.length };
+  });
+
 export const addApplicationFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) =>
