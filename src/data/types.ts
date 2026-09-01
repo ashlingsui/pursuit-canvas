@@ -9,7 +9,17 @@ export const CONTACT_STAGES = [
 
 export type ContactStage = (typeof CONTACT_STAGES)[number];
 
-export const APP_STAGES = ["to_be_applied", "applied", "referred", "screen", "round_1", "final", "offer"] as const;
+export const APP_STAGES = [
+  "to_be_applied",
+  "applied",
+  "referred",
+  "screen",
+  "take_home",
+  "round_1",
+  "final",
+  "offer",
+] as const;
+
 
 export type AppStage = (typeof APP_STAGES)[number];
 
