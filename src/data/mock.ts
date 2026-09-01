@@ -36,7 +36,7 @@ export const mockContacts: Contact[] = [
   {
     id: "c3",
     name: "Priya Ellingsworth",
-    org: "Kestrel Robotics",
+    org: "Lumen Cartography",
     affiliation: "Haas 2026",
     role: "Hardware PM",
     tags: ["Ops"],
@@ -67,7 +67,7 @@ export const mockContacts: Contact[] = [
     id: "c6",
     starred: true,
     name: "Devon Kirtland",
-    org: "Aster Analytics",
+    org: "Northgate Health",
     affiliation: "Haas 2027",
     role: "Data Scientist",
     tags: ["Tech PM"],
@@ -111,7 +111,7 @@ export const mockContacts: Contact[] = [
   {
     id: "c10",
     name: "Emeka Thorvald",
-    org: "Harborlight Logistics",
+    org: "Tidepool Studio",
     affiliation: "Haas alum 2015",
     role: "Ops Manager",
     tags: ["Referral offered"],
@@ -201,7 +201,7 @@ export const mockContacts: Contact[] = [
   {
     id: "c17",
     name: "Yuki Marchetti",
-    org: "Saltgrass Media",
+    org: "Fernway Mobility",
     affiliation: "Haas 2026",
     role: "Editorial Lead",
     tags: ["Design"],
