@@ -1,12 +1,13 @@
 import { useState, type ReactNode } from "react";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { LogOut, Plus, Search } from "lucide-react";
+import { LogOut, Plus, Search, Upload } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { CONTACT_STAGES, APP_STAGES, appStageMeta, contactStageMeta } from "@/data/types";
 import { useBoard } from "@/lib/board-store";
 import { dueTone } from "@/lib/dates";
 import { AddApplicationDialog, AddContactDialog } from "@/components/board/AddDialogs";
+import { BatchUploadContacts } from "@/components/board/BatchUploadContacts";
 import { cn } from "@/lib/utils";
 
 function Pulse({ onApplications }: { onApplications: boolean }) {
