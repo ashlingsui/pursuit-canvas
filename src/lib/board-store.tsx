@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo, useState, type Context, type ReactNode } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
   AppStage,
   Application,
@@ -243,5 +243,3 @@ export function useBoard() {
   if (!ctx) throw new Error("useBoard must be used inside BoardProvider");
   return ctx;
 }
-
-export { useMutation };
