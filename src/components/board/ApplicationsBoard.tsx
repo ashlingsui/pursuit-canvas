@@ -13,11 +13,25 @@ import { useBoardSensors, resolveDrop } from "./dnd";
 const boardClass = "flex gap-5 overflow-x-auto px-6 pb-6 pt-2 lg:px-10";
 
 export function ApplicationsBoard() {
-  const { applications, query, moveApplication, setAside, restore } = useBoard();
+  const { applications, query, moveApplication, setAside, restore, loading, error } = useBoard();
   const sensors = useBoardSensors();
   const hydrated = useHydrated();
   const [dragging, setDragging] = useState<Application | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const notice = error
+    ? "Couldn't load your board. Refresh to try again."
+    : loading
+      ? "Loading your board…"
+      : null;
+
+  if (notice) {
+    return (
+      <p className="px-6 py-16 font-display text-[1rem] italic text-muted-foreground lg:px-10">
+        {notice}
+      </p>
+    );
+  }
 
   const q = query.trim().toLowerCase();
   const matches = (a: Application) =>

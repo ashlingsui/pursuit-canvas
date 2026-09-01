@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { MoreHorizontal } from "lucide-react";
+import { ExternalLink, MoreHorizontal } from "lucide-react";
 import type { Application } from "@/data/types";
 import { formatShortDate } from "@/lib/dates";
 import { cn } from "@/lib/utils";
@@ -35,6 +35,23 @@ export function ApplicationCardBody({ app, accent }: { app: Application; accent:
         <p className="mt-2 text-[0.74rem] text-muted-foreground">
           Referred by <span className="font-semibold text-foreground/80">{app.referredBy}</span>
         </p>
+      )}
+      {(app.location || app.seniority) && (
+        <p className="mt-1.5 text-[0.72rem] text-muted-foreground/80">
+          {[app.seniority, app.location].filter(Boolean).join(" · ")}
+        </p>
+      )}
+      {app.postingUrl && (
+        <a
+          href={app.postingUrl}
+          target="_blank"
+          rel="noreferrer noopener"
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={(e) => e.stopPropagation()}
+          className="mt-2 inline-flex items-center gap-1 text-[0.72rem] font-semibold text-muted-foreground underline decoration-border underline-offset-4 hover:text-foreground"
+        >
+          <ExternalLink className="h-3 w-3" /> View posting
+        </a>
       )}
     </>
   );

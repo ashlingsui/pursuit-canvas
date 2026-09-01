@@ -1,6 +1,8 @@
 import { useState, type ReactNode } from "react";
-import { Link, useRouterState } from "@tanstack/react-router";
-import { Plus, Search } from "lucide-react";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
+import { LogOut, Plus, Search } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { CONTACT_STAGES, APP_STAGES, appStageMeta, contactStageMeta } from "@/data/types";
 import { useBoard } from "@/lib/board-store";
 import { dueTone } from "@/lib/dates";
@@ -37,8 +39,17 @@ function Pulse({ onApplications }: { onApplications: boolean }) {
 export function Chrome({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const onApplications = pathname.startsWith("/applications");
-  const { query, setQuery, contacts } = useBoard();
+  const { query, setQuery, contacts, displayName } = useBoard();
   const [adding, setAdding] = useState(false);
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  async function signOut() {
+    await queryClient.cancelQueries();
+    queryClient.clear();
+    await supabase.auth.signOut();
+    navigate({ to: "/", replace: true });
+  }
 
   const needsAttention = contacts.filter((c) => {
     const tone = dueTone(c.nextActionDue);
@@ -79,7 +90,7 @@ export function Chrome({ children }: { children: ReactNode }) {
           <div className="flex flex-wrap items-center gap-3">
             <div className="flex items-center gap-1 rounded-full border border-border/70 bg-card p-1 shadow-[var(--shadow-card)]">
               <Link
-                to="/"
+                to="/contacts"
                 className={cn(
                   tab,
                   !onApplications
@@ -118,6 +129,15 @@ export function Chrome({ children }: { children: ReactNode }) {
             >
               <Plus className="h-3.5 w-3.5" />
               {onApplications ? "Application" : "Contact"}
+            </button>
+
+            <button
+              onClick={signOut}
+              title={displayName ? `Signed in as ${displayName}` : "Sign out"}
+              className="flex items-center gap-1.5 rounded-full border border-border/70 bg-card px-3.5 py-2.5 text-[0.8rem] font-semibold text-muted-foreground shadow-[var(--shadow-card)] transition-colors hover:text-foreground"
+            >
+              <LogOut className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">{displayName ?? "Sign out"}</span>
             </button>
           </div>
         </div>

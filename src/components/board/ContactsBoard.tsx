@@ -45,11 +45,25 @@ function CompanyLabel({ company, count, accent }: { company: string; count: numb
 }
 
 export function ContactsBoard() {
-  const { contacts, query, moveContact } = useBoard();
+  const { contacts, query, moveContact, loading, error } = useBoard();
   const sensors = useBoardSensors();
   const hydrated = useHydrated();
   const [dragging, setDragging] = useState<Contact | null>(null);
   const [openId, setOpenId] = useState<string | null>(null);
+
+  const notice = error
+    ? "Couldn't load your board. Refresh to try again."
+    : loading
+      ? "Loading your board…"
+      : null;
+
+  if (notice) {
+    return (
+      <p className="px-6 py-16 font-display text-[1rem] italic text-muted-foreground lg:px-10">
+        {notice}
+      </p>
+    );
+  }
 
   const q = query.trim().toLowerCase();
   const visible = q
