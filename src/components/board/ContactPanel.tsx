@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { X } from "lucide-react";
+import { Star, X } from "lucide-react";
 import { CONTACT_STAGES, contactStageMeta, type Contact } from "@/data/types";
 import { useBoard } from "@/lib/board-store";
 import { formatDate } from "@/lib/dates";
@@ -10,7 +10,7 @@ const fieldClass =
 const labelClass = "text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground/80";
 
 export function ContactPanel({ contact, onClose }: { contact: Contact | null; onClose: () => void }) {
-  const { updateContact, addNote } = useBoard();
+  const { updateContact, addNote, toggleStar } = useBoard();
   const [draft, setDraft] = useState("");
 
   useEffect(() => {
@@ -52,6 +52,13 @@ export function ContactPanel({ contact, onClose }: { contact: Contact | null; on
               />
               <span className="text-muted-foreground">·</span>
               <input
+                value={contact.role}
+                onChange={(e) => updateContact(contact.id, { role: e.target.value })}
+                size={Math.max(contact.role.length, 4)}
+                className="rounded-md border border-transparent bg-transparent text-[0.85rem] text-muted-foreground outline-none hover:border-border focus:border-ring"
+              />
+              <span className="text-muted-foreground">·</span>
+              <input
                 value={contact.affiliation}
                 onChange={(e) => updateContact(contact.id, { affiliation: e.target.value })}
                 size={Math.max(contact.affiliation.length, 4)}
@@ -59,6 +66,16 @@ export function ContactPanel({ contact, onClose }: { contact: Contact | null; on
               />
             </div>
           </div>
+          <button
+            aria-label={contact.starred ? "Remove star" : "Star contact"}
+            aria-pressed={!!contact.starred}
+            onClick={() => toggleStar(contact.id)}
+            className={contact.starred
+              ? "rounded-full p-2 text-star transition-colors hover:bg-muted"
+              : "rounded-full p-2 text-muted-foreground/50 transition-colors hover:bg-muted hover:text-star"}
+          >
+            <Star className="h-4 w-4" fill={contact.starred ? "currentColor" : "none"} strokeWidth={1.8} />
+          </button>
           <button
             onClick={onClose}
             className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
