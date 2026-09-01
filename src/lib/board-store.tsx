@@ -28,6 +28,11 @@ const BoardContext = createContext<BoardStore | null>(null);
 
 const uid = () => Math.random().toString(36).slice(2, 10);
 
+function omitSetAside(app: Application): Application {
+  const { setAside: _setAside, ...rest } = app;
+  return rest;
+}
+
 function reorder<T extends { id: string }>(items: T[], id: string, beforeId: string | null): T[] {
   const moving = items.find((i) => i.id === id);
   if (!moving) return items;
@@ -60,7 +65,7 @@ export function BoardProvider({ children }: { children: ReactNode }) {
       moveApplication: (id, stage, beforeId) =>
         setApplications((prev) =>
           reorder(
-            prev.map((a) => (a.id === id ? { ...a, stage, setAside: undefined } : a)),
+            prev.map((a) => (a.id === id ? { ...omitSetAside(a), stage } : a)),
             id,
             beforeId,
           ),
@@ -80,7 +85,7 @@ export function BoardProvider({ children }: { children: ReactNode }) {
       setAside: (id, reason) =>
         setApplications((prev) => prev.map((a) => (a.id === id ? { ...a, setAside: reason } : a))),
       restore: (id) =>
-        setApplications((prev) => prev.map((a) => (a.id === id ? { ...a, setAside: undefined } : a))),
+        setApplications((prev) => prev.map((a) => (a.id === id ? omitSetAside(a) : a))),
     }),
     [contacts, applications, query],
   );
