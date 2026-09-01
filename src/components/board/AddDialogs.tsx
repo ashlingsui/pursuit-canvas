@@ -160,20 +160,56 @@ export function AddContactDialog({ onClose }: { onClose: () => void }) {
 }
 
 export function AddApplicationDialog({ onClose }: { onClose: () => void }) {
-  const { addApplication } = useBoard();
+  const { addApplication, contacts } = useBoard();
+  const [url, setUrl] = useState("");
+  const [fetching, setFetching] = useState(false);
+  const [fetchNote, setFetchNote] = useState<string | null>(null);
+  const [fetchError, setFetchError] = useState<string | null>(null);
   const [form, setForm] = useState({
     company: "",
     role: "",
     appliedOn: new Date().toISOString().slice(0, 10),
     resumeVersion: "",
-    referredBy: "",
+    referredByContactId: "",
+    location: "",
+    seniority: "",
     stage: APP_STAGES[0] as (typeof APP_STAGES)[number],
   });
+
+  const sortedContacts = [...contacts].sort((a, b) => a.name.localeCompare(b.name));
+
+  async function fetchDetails() {
+    const trimmed = url.trim();
+    if (!trimmed) return;
+    setFetching(true);
+    setFetchError(null);
+    setFetchNote(null);
+    try {
+      const result = await readJobPosting({ data: { url: trimmed } });
+      if (!result.ok) {
+        setFetchError(result.error);
+        return;
+      }
+      const d = result.details;
+      setForm((f) => ({
+        ...f,
+        company: d.company || f.company,
+        role: d.role || f.role,
+        location: d.location || f.location,
+        seniority: d.seniority || f.seniority,
+      }));
+      setFetchNote(d.summary || "Filled in what the posting listed. Edit anything that looks off.");
+    } catch {
+      setFetchError("Couldn't read that link. Fill it in manually.");
+    } finally {
+      setFetching(false);
+    }
+  }
 
   return (
     <Shell
       title="New application"
-      subtitle="One more line in the water."
+      subtitle="Paste the posting link and I'll fill in what I can."
       onClose={onClose}
       onSubmit={() => {
         if (!form.company.trim()) return;
@@ -183,19 +219,73 @@ export function AddApplicationDialog({ onClose }: { onClose: () => void }) {
           appliedOn: form.appliedOn,
           resumeVersion: form.resumeVersion.trim() || "Base",
           stage: form.stage,
-          ...(form.referredBy.trim() ? { referredBy: form.referredBy.trim() } : {}),
+          ...(form.referredByContactId ? { referredByContactId: form.referredByContactId } : {}),
+          ...(form.referredByContactId
+            ? {
+                referredBy:
+                  contacts.find((c) => c.id === form.referredByContactId)?.name ?? undefined,
+              }
+            : {}),
+          ...(url.trim() ? { postingUrl: url.trim() } : {}),
+          ...(form.location.trim() ? { location: form.location.trim() } : {}),
+          ...(form.seniority.trim() ? { seniority: form.seniority.trim() } : {}),
         });
         onClose();
       }}
     >
+      <label className="block">
+        <span className={label}>Job posting link</span>
+        <div className="flex gap-2">
+          <input
+            autoFocus
+            type="url"
+            placeholder="https://…"
+            className={input}
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+          />
+          <button
+            type="button"
+            onClick={fetchDetails}
+            disabled={fetching || !url.trim()}
+            className="flex shrink-0 items-center gap-1.5 rounded-lg border border-border px-3 text-[0.78rem] font-semibold text-foreground transition-colors hover:bg-secondary/60 disabled:opacity-50"
+          >
+            {fetching ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Wand2 className="h-3.5 w-3.5" />}
+            {fetching ? "Reading" : "Fetch details"}
+          </button>
+        </div>
+        {fetchNote && <p className="mt-1.5 text-[0.75rem] text-muted-foreground">{fetchNote}</p>}
+        {fetchError && <p className="mt-1.5 text-[0.75rem] text-destructive">{fetchError}</p>}
+      </label>
+
       <div className="grid grid-cols-2 gap-3">
         <label className="block">
           <span className={label}>Company</span>
-          <input autoFocus className={input} value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} />
+          <input className={input} value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} />
         </label>
         <label className="block">
           <span className={label}>Role</span>
           <input className={input} value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })} />
+        </label>
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <label className="block">
+          <span className={label}>Location</span>
+          <input
+            className={input}
+            placeholder="Remote"
+            value={form.location}
+            onChange={(e) => setForm({ ...form, location: e.target.value })}
+          />
+        </label>
+        <label className="block">
+          <span className={label}>Seniority</span>
+          <input
+            className={input}
+            placeholder="Senior"
+            value={form.seniority}
+            onChange={(e) => setForm({ ...form, seniority: e.target.value })}
+          />
         </label>
       </div>
       <div className="grid grid-cols-2 gap-3">
@@ -212,7 +302,7 @@ export function AddApplicationDialog({ onClose }: { onClose: () => void }) {
           <span className={label}>Resume version</span>
           <input
             className={input}
-            placeholder="Amazon_ALA"
+            placeholder="Nimbus_Infra"
             value={form.resumeVersion}
             onChange={(e) => setForm({ ...form, resumeVersion: e.target.value })}
           />
@@ -235,11 +325,18 @@ export function AddApplicationDialog({ onClose }: { onClose: () => void }) {
         </label>
         <label className="block">
           <span className={label}>Referred by</span>
-          <input
+          <select
             className={input}
-            value={form.referredBy}
-            onChange={(e) => setForm({ ...form, referredBy: e.target.value })}
-          />
+            value={form.referredByContactId}
+            onChange={(e) => setForm({ ...form, referredByContactId: e.target.value })}
+          >
+            <option value="">No referral</option>
+            {sortedContacts.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name} — {c.org}
+              </option>
+            ))}
+          </select>
         </label>
       </div>
     </Shell>
