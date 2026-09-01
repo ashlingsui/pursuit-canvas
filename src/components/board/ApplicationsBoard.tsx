@@ -171,6 +171,8 @@ export function ApplicationsBoard() {
                     app={app}
                     accent={meta.accent}
                     onSetAside={(reason) => setAside(app.id, reason)}
+                    onToggleStar={() => toggleApplicationStar(app.id)}
+
                   />
                 ))}
               </SortableContext>
