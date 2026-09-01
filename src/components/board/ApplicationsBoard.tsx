@@ -54,7 +54,10 @@ export function ApplicationsBoard() {
     stage,
     index,
     meta: appStageMeta[stage],
-    items: active.filter((a) => a.stage === stage && matches(a)),
+    items: active
+      .filter((a) => a.stage === stage && matches(a))
+      .sort((a, b) => Number(b.starred ?? false) - Number(a.starred ?? false)),
+
   }));
 
   const drawer = (
