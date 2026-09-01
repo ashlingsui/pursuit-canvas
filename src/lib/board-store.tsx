@@ -197,6 +197,30 @@ export function BoardProvider({ children }: { children: ReactNode }) {
         }).then(settle, fail);
       },
 
+      addContactsBatch: (contacts) => {
+        const newContacts: Contact[] = contacts.map((c) => ({
+          ...c,
+          id: uid(),
+          stage: "not_contacted",
+          notes: [],
+        }));
+        patchCache((prev) => ({
+          ...prev,
+          contacts: [...newContacts, ...prev.contacts],
+        }));
+        addContactsBatchFn({
+          data: contacts.map((c) => ({
+            name: c.name,
+            org: c.org,
+            role: c.role,
+            affiliation: c.affiliation,
+            tags: c.tags,
+            nextAction: c.nextAction ?? null,
+            nextActionDue: c.nextActionDue ?? null,
+          })),
+        }).then(settle, fail);
+      },
+
       addApplication: (app) => {
         patchCache((prev) => ({
           ...prev,
