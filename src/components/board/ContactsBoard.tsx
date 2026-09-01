@@ -45,11 +45,17 @@ function CompanyLabel({ company, count, accent }: { company: string; count: numb
 }
 
 export function ContactsBoard() {
-  const { contacts, query, moveContact } = useBoard();
+  const { contacts, query, moveContact, loading, error } = useBoard();
   const sensors = useBoardSensors();
   const hydrated = useHydrated();
   const [dragging, setDragging] = useState<Contact | null>(null);
   const [openId, setOpenId] = useState<string | null>(null);
+
+  const notice = error
+    ? "Couldn't load your board. Refresh to try again."
+    : loading
+      ? "Loading your board…"
+      : null;
 
   const q = query.trim().toLowerCase();
   const visible = q
