@@ -78,6 +78,7 @@ export function ContactPanel({ contact, onClose }: { contact: Contact | null; on
           </button>
           <button
             onClick={onClose}
+            aria-label="Close"
             className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
           >
             <X className="h-4 w-4" />
