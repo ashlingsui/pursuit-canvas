@@ -9,7 +9,7 @@ export const CONTACT_STAGES = [
 
 export type ContactStage = (typeof CONTACT_STAGES)[number];
 
-export const APP_STAGES = ["applied", "referred", "screen", "round_1", "final", "offer"] as const;
+export const APP_STAGES = ["to_be_applied", "applied", "referred", "screen", "round_1", "final", "offer"] as const;
 
 export type AppStage = (typeof APP_STAGES)[number];
 
@@ -98,6 +98,7 @@ export const contactStageMeta: Record<ContactStage, StageMeta<ContactStage>> = {
 };
 
 export const appStageMeta: Record<AppStage, StageMeta<AppStage>> = {
+  to_be_applied: { id: "to_be_applied", label: "To be applied", accent: "var(--stage-0)", empty: "Roles you want to go after." },
   applied: { id: "applied", label: "Applied", accent: "var(--stage-1)", empty: "Nothing new out the door." },
   referred: { id: "referred", label: "Referred", accent: "var(--stage-2)", empty: "No warm intros in flight." },
   screen: { id: "screen", label: "Screen", accent: "var(--stage-3)", empty: "No screens booked." },
