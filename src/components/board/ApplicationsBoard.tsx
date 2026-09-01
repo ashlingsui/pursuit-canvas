@@ -13,7 +13,17 @@ import { useBoardSensors, resolveDrop } from "./dnd";
 const boardClass = "flex gap-5 overflow-x-auto px-6 pb-6 pt-2 lg:px-10";
 
 export function ApplicationsBoard() {
-  const { applications, query, moveApplication, setAside, restore, loading, error } = useBoard();
+  const {
+    applications,
+    query,
+    moveApplication,
+    setAside,
+    restore,
+    toggleApplicationStar,
+    loading,
+    error,
+  } = useBoard();
+
   const sensors = useBoardSensors();
   const hydrated = useHydrated();
   const [dragging, setDragging] = useState<Application | null>(null);
@@ -44,7 +54,10 @@ export function ApplicationsBoard() {
     stage,
     index,
     meta: appStageMeta[stage],
-    items: active.filter((a) => a.stage === stage && matches(a)),
+    items: active
+      .filter((a) => a.stage === stage && matches(a))
+      .sort((a, b) => Number(b.starred ?? false) - Number(a.starred ?? false)),
+
   }));
 
   const drawer = (
@@ -158,6 +171,8 @@ export function ApplicationsBoard() {
                     app={app}
                     accent={meta.accent}
                     onSetAside={(reason) => setAside(app.id, reason)}
+                    onToggleStar={() => toggleApplicationStar(app.id)}
+
                   />
                 ))}
               </SortableContext>

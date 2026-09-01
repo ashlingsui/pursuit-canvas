@@ -169,6 +169,8 @@
   --stage-4: oklch(0.63 0.11 158);
   --stage-5: oklch(0.72 0.13 82);
   --stage-6: oklch(0.64 0.16 32);
+  --stage-7: oklch(0.62 0.105 176);
+
 
   --overdue: oklch(0.56 0.18 24);
   --soon: oklch(0.63 0.13 74);
@@ -189,6 +191,8 @@
   --color-stage-4: var(--stage-4);
   --color-stage-5: var(--stage-5);
   --color-stage-6: var(--stage-6);
+  --color-stage-7: var(--stage-7);
+
   --color-overdue: var(--overdue);
   --color-soon: var(--soon);
   --color-star: var(--star);

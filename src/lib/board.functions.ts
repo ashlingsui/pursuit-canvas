@@ -41,6 +41,8 @@ type ApplicationRow = {
   posting_url: string | null;
   location: string | null;
   seniority: string | null;
+  starred: boolean;
+
 };
 
 type NoteRow = { id: string; contact_id: string; note_date: string; body: string };
@@ -74,6 +76,8 @@ function toApplication(row: ApplicationRow, names: Map<string, string>): Applica
     appliedOn: row.applied_on,
     resumeVersion: row.resume_version,
     stage: row.stage as AppStage,
+    ...(row.starred ? { starred: true } : {}),
+
     ...(row.set_aside ? { setAside: row.set_aside as "rejected" | "ghosted" } : {}),
     ...(row.referred_by_contact_id
       ? {
@@ -368,6 +372,21 @@ export const addApplicationFn = createServerFn({ method: "POST" })
     if (error) throw error;
     return { id: inserted!.id };
   });
+
+export const starApplicationFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z.object({ id: z.string(), starred: z.boolean() }).parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase
+      .from("applications")
+      .update({ starred: data.starred })
+      .eq("id", data.id);
+    if (error) throw error;
+    return { ok: true };
+  });
+
 
 export const setApplicationAsideFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])

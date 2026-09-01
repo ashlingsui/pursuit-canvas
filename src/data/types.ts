@@ -9,7 +9,17 @@ export const CONTACT_STAGES = [
 
 export type ContactStage = (typeof CONTACT_STAGES)[number];
 
-export const APP_STAGES = ["to_be_applied", "applied", "referred", "screen", "round_1", "final", "offer"] as const;
+export const APP_STAGES = [
+  "to_be_applied",
+  "applied",
+  "referred",
+  "screen",
+  "take_home",
+  "round_1",
+  "final",
+  "offer",
+] as const;
+
 
 export type AppStage = (typeof APP_STAGES)[number];
 
@@ -48,8 +58,10 @@ export type Application = {
   location?: string;
   seniority?: string;
   stage: AppStage;
+  starred?: boolean;
   setAside?: SetAsideReason;
 };
+
 
 type StageMeta<T extends string> = {
   id: T;
@@ -102,7 +114,9 @@ export const appStageMeta: Record<AppStage, StageMeta<AppStage>> = {
   applied: { id: "applied", label: "Applied", accent: "var(--stage-1)", empty: "Nothing new out the door." },
   referred: { id: "referred", label: "Referred", accent: "var(--stage-2)", empty: "No warm intros in flight." },
   screen: { id: "screen", label: "Screen", accent: "var(--stage-3)", empty: "No screens booked." },
+  take_home: { id: "take_home", label: "Take home", accent: "var(--stage-7)", empty: "No take-home exercises out yet." },
   round_1: { id: "round_1", label: "Round 1", accent: "var(--stage-4)", empty: "Nobody at round one yet." },
+
   final: { id: "final", label: "Final", accent: "var(--stage-5)", empty: "The finals shelf is empty." },
   offer: { id: "offer", label: "Offer", accent: "var(--stage-6)", empty: "Saving this space for good news." },
 };
