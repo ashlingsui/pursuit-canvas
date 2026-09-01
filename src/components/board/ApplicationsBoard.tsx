@@ -6,12 +6,14 @@ import { APP_STAGES, appStageMeta, type Application } from "@/data/types";
 import { useBoard } from "@/lib/board-store";
 import { formatShortDate } from "@/lib/dates";
 import { Column } from "./Column";
-import { ApplicationCard, ApplicationCardBody } from "./ApplicationCard";
+import { ApplicationCard, ApplicationCardBody, ApplicationCardStatic } from "./ApplicationCard";
 import { useBoardSensors, resolveDrop } from "./dnd";
+import { useHydrated } from "@/lib/use-hydrated";
 
 export function ApplicationsBoard() {
   const { applications, query, moveApplication, setAside, restore } = useBoard();
   const sensors = useBoardSensors();
+  const hydrated = useHydrated();
   const [dragging, setDragging] = useState<Application | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -53,14 +55,18 @@ export function ApplicationsBoard() {
                 empty={q ? "No matches in this stage." : meta.empty}
               >
                 <SortableContext items={items.map((i) => i.id)} strategy={verticalListSortingStrategy}>
-                  {items.map((app) => (
-                    <ApplicationCard
-                      key={app.id}
-                      app={app}
-                      accent={meta.accent}
-                      onSetAside={(reason) => setAside(app.id, reason)}
-                    />
-                  ))}
+                  {items.map((app) =>
+                    hydrated ? (
+                      <ApplicationCard
+                        key={app.id}
+                        app={app}
+                        accent={meta.accent}
+                        onSetAside={(reason) => setAside(app.id, reason)}
+                      />
+                    ) : (
+                      <ApplicationCardStatic key={app.id} app={app} accent={meta.accent} />
+                    ),
+                  )}
                 </SortableContext>
               </Column>
             );

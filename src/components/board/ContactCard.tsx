@@ -66,6 +66,25 @@ export function ContactCardBody({ contact, accent }: { contact: Contact; accent:
   );
 }
 
+export function ContactCardStatic({
+  contact,
+  accent,
+  onOpen,
+}: {
+  contact: Contact;
+  accent: string;
+  onOpen: () => void;
+}) {
+  return (
+    <article
+      className="animate-settle relative cursor-grab rounded-[0.85rem] border border-border/70 bg-card p-3.5 pl-4 text-left shadow-[var(--shadow-card)] transition-shadow duration-200 hover:shadow-[var(--shadow-lift)]"
+      onClick={onOpen}
+    >
+      <ContactCardBody contact={contact} accent={accent} />
+    </article>
+  );
+}
+
 export function ContactCard({
   contact,
   accent,

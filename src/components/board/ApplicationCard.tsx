@@ -40,6 +40,14 @@ export function ApplicationCardBody({ app, accent }: { app: Application; accent:
   );
 }
 
+export function ApplicationCardStatic({ app, accent }: { app: Application; accent: string }) {
+  return (
+    <article className="animate-settle relative rounded-[0.85rem] border border-border/70 bg-card p-3.5 pl-4 shadow-[var(--shadow-card)]">
+      <ApplicationCardBody app={app} accent={accent} />
+    </article>
+  );
+}
+
 export function ApplicationCard({
   app,
   accent,

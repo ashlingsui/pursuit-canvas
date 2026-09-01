@@ -4,13 +4,15 @@ import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import { CONTACT_STAGES, contactStageMeta, type Contact } from "@/data/types";
 import { useBoard } from "@/lib/board-store";
 import { Column } from "./Column";
-import { ContactCard, ContactCardBody } from "./ContactCard";
+import { ContactCard, ContactCardBody, ContactCardStatic } from "./ContactCard";
 import { ContactPanel } from "./ContactPanel";
 import { useBoardSensors, resolveDrop } from "./dnd";
+import { useHydrated } from "@/lib/use-hydrated";
 
 export function ContactsBoard() {
   const { contacts, query, moveContact } = useBoard();
   const sensors = useBoardSensors();
+  const hydrated = useHydrated();
   const [dragging, setDragging] = useState<Contact | null>(null);
   const [openId, setOpenId] = useState<string | null>(null);
 
@@ -57,14 +59,23 @@ export function ContactsBoard() {
                 empty={q ? "No matches in this stage." : meta.empty}
               >
                 <SortableContext items={items.map((i) => i.id)} strategy={verticalListSortingStrategy}>
-                  {items.map((contact) => (
-                    <ContactCard
-                      key={contact.id}
-                      contact={contact}
-                      accent={meta.accent}
-                      onOpen={() => setOpenId(contact.id)}
-                    />
-                  ))}
+                  {items.map((contact) =>
+                    hydrated ? (
+                      <ContactCard
+                        key={contact.id}
+                        contact={contact}
+                        accent={meta.accent}
+                        onOpen={() => setOpenId(contact.id)}
+                      />
+                    ) : (
+                      <ContactCardStatic
+                        key={contact.id}
+                        contact={contact}
+                        accent={meta.accent}
+                        onOpen={() => setOpenId(contact.id)}
+                      />
+                    ),
+                  )}
                 </SortableContext>
               </Column>
             );
