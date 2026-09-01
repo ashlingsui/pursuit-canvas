@@ -11,6 +11,7 @@ import type {
 import {
   addApplicationFn,
   addContactFn,
+  addContactsBatchFn,
   addNoteFn,
   loadBoard,
   moveApplicationFn,
