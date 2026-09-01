@@ -57,6 +57,9 @@ export function Chrome({ children }: { children: ReactNode }) {
             </p>
             <h1 className="mt-1 font-display text-[2.1rem] font-semibold leading-none tracking-tight text-foreground">
               Groundwork
+              <span className="ml-2 align-middle text-[0.8rem] font-medium tracking-normal text-muted-foreground">
+                Recruiting Pipeline Tracker
+              </span>
             </h1>
             <p className="mt-2.5 text-[0.86rem] text-muted-foreground">
               {needsAttention > 0 ? (
