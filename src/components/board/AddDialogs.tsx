@@ -1,4 +1,6 @@
 import { useState, type ReactNode } from "react";
+import { Loader2, Wand2 } from "lucide-react";
+import { readJobPosting } from "@/lib/job-posting.functions";
 import { APP_STAGES, CONTACT_STAGES, appStageMeta, contactStageMeta } from "@/data/types";
 import { useBoard } from "@/lib/board-store";
 
@@ -213,6 +215,7 @@ export function AddApplicationDialog({ onClose }: { onClose: () => void }) {
       onClose={onClose}
       onSubmit={() => {
         if (!form.company.trim()) return;
+        const referrerName = contacts.find((c) => c.id === form.referredByContactId)?.name;
         addApplication({
           company: form.company.trim(),
           role: form.role.trim() || "—",
@@ -220,12 +223,7 @@ export function AddApplicationDialog({ onClose }: { onClose: () => void }) {
           resumeVersion: form.resumeVersion.trim() || "Base",
           stage: form.stage,
           ...(form.referredByContactId ? { referredByContactId: form.referredByContactId } : {}),
-          ...(form.referredByContactId
-            ? {
-                referredBy:
-                  contacts.find((c) => c.id === form.referredByContactId)?.name ?? undefined,
-              }
-            : {}),
+          ...(referrerName ? { referredBy: referrerName } : {}),
           ...(url.trim() ? { postingUrl: url.trim() } : {}),
           ...(form.location.trim() ? { location: form.location.trim() } : {}),
           ...(form.seniority.trim() ? { seniority: form.seniority.trim() } : {}),
